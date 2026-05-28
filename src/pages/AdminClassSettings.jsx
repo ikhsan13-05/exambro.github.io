@@ -433,19 +433,22 @@ export default function AdminClassSettings() {
         </div>
 
         {openForm && (
-          <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-slate-950/60 p-3 backdrop-blur-sm sm:items-center sm:p-5">
-            <div className="max-h-[92vh] w-full max-w-xl overflow-y-auto rounded-[2rem] bg-white shadow-2xl">
-              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white/95 px-6 py-5 backdrop-blur">
+          <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-slate-950/60 p-0 backdrop-blur-sm sm:items-center sm:p-5">
+            <div className="flex max-h-[88vh] w-full max-w-xl flex-col overflow-hidden rounded-t-[2rem] bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-[2rem]">
+              {/* HEADER */}
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur sm:px-6 sm:py-5">
                 <div>
-                  <h2 className="text-xl font-black text-slate-900">
+                  <h2 className="text-lg font-black text-slate-900 sm:text-xl">
                     {isEdit ? "Edit Kelas" : "Tambah Kelas"}
                   </h2>
-                  <p className="mt-1 text-sm font-semibold text-slate-500">
+
+                  <p className="mt-1 text-xs font-semibold text-slate-500 sm:text-sm">
                     Isi data kelas dengan benar.
                   </p>
                 </div>
 
                 <button
+                  type="button"
                   onClick={() => setOpenForm(false)}
                   className="rounded-2xl bg-slate-100 p-3 text-slate-600 hover:bg-slate-200"
                 >
@@ -453,38 +456,58 @@ export default function AdminClassSettings() {
                 </button>
               </div>
 
-              <form onSubmit={handleSave} className="grid gap-5 p-6">
-                <Input
-                  label="Nama Kelas"
-                  icon={<GraduationCap className="h-5 w-5" />}
-                  value={form.namaKelas}
-                  onChange={(value) =>
-                    setForm({ ...form, namaKelas: value.toUpperCase() })
-                  }
-                  placeholder="Contoh: VII.10"
-                />
+              {/* BODY */}
+              <form
+                id="class-setting-form"
+                onSubmit={handleSave}
+                className="flex-1 overflow-y-auto p-5 sm:p-6"
+              >
+                <div className="grid gap-4 sm:gap-5">
+                  <Input
+                    label="Nama Kelas"
+                    icon={<GraduationCap className="h-5 w-5" />}
+                    value={form.namaKelas}
+                    onChange={(value) =>
+                      setForm({ ...form, namaKelas: value.toUpperCase() })
+                    }
+                    placeholder="Contoh: VII A"
+                  />
 
-                <Select
-                  label="Tingkat"
-                  icon={<Layers3 className="h-5 w-5" />}
-                  value={form.tingkat}
-                  onChange={(value) => setForm({ ...form, tingkat: value })}
-                  options={tingkatOptions.map((item) => ({
-                    label: item,
-                    value: item,
-                  }))}
-                />
+                  <Select
+                    label="Tingkat"
+                    icon={<Layers3 className="h-5 w-5" />}
+                    value={form.tingkat}
+                    onChange={(value) => setForm({ ...form, tingkat: value })}
+                    options={tingkatOptions.map((item) => ({
+                      label: item,
+                      value: item,
+                    }))}
+                  />
 
-                <Select
-                  label="Status"
-                  value={form.status}
-                  onChange={(value) => setForm({ ...form, status: value })}
-                  options={[
-                    { label: "AKTIF", value: "AKTIF" },
-                    { label: "NONAKTIF", value: "NONAKTIF" },
-                  ]}
-                />
+                  <Select
+                    label="Status"
+                    value={form.status}
+                    onChange={(value) => setForm({ ...form, status: value })}
+                    options={[
+                      { label: "AKTIF", value: "AKTIF" },
+                      { label: "NONAKTIF", value: "NONAKTIF" },
+                    ]}
+                  />
 
+                  <div className="rounded-3xl bg-indigo-50 p-4">
+                    <div className="flex items-start gap-3">
+                      <GraduationCap className="mt-0.5 h-5 w-5 shrink-0 text-indigo-600" />
+                      <p className="text-xs font-semibold leading-5 text-indigo-700">
+                        Kelas yang berstatus AKTIF akan tampil otomatis pada
+                        dropdown login siswa dan setting ujian.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+              {/* FOOTER */}
+              <div className="border-t border-slate-100 bg-white px-5 py-4 sm:px-6">
                 <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                   <button
                     type="button"
@@ -496,6 +519,7 @@ export default function AdminClassSettings() {
 
                   <button
                     type="submit"
+                    form="class-setting-form"
                     disabled={loadingSave}
                     className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-black text-white shadow-xl shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-60"
                   >
@@ -512,7 +536,7 @@ export default function AdminClassSettings() {
                     )}
                   </button>
                 </div>
-              </form>
+              </div>
             </div>
           </div>
         )}

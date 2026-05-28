@@ -239,13 +239,17 @@ export default function AdminExamSettings() {
     const canvas = document.getElementById("exam-qr-canvas");
     if (!canvas || !selectedQr) return;
 
+    const safeName = `${selectedQr.namaUjian}-${selectedQr.kelas}`
+      .replace(/[^\w\s-]/g, "")
+      .replace(/\s+/g, "-");
+
     const pngUrl = canvas
       .toDataURL("image/png")
       .replace("image/png", "image/octet-stream");
 
     const link = document.createElement("a");
     link.href = pngUrl;
-    link.download = `QR-${selectedQr.namaUjian}-${selectedQr.kelas}.png`;
+    link.download = `QR-${safeName}.png`;
     link.click();
   }
 
@@ -446,29 +450,22 @@ export default function AdminExamSettings() {
 
         {openForm && (
           <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-slate-950/60 p-0 backdrop-blur-sm sm:items-center sm:p-5">
-            <div
-              className="
-        flex max-h-[88vh] w-full max-w-4xl flex-col overflow-hidden
-        rounded-t-[2rem] bg-white shadow-2xl
-        sm:max-h-[92vh] sm:rounded-[2rem]
-      "
-            >
+            <div className="flex max-h-[88vh] w-full max-w-3xl flex-col overflow-hidden rounded-t-[2rem] bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-[2rem]">
               {/* HEADER */}
-              <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur md:px-6 md:py-5">
-                <div className="min-w-0">
-                  <h2 className="text-lg font-black text-slate-900 md:text-xl">
+              <div className="sticky top-0 z-10 flex items-center justify-between border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur sm:px-6 sm:py-5">
+                <div>
+                  <h2 className="text-lg font-black text-slate-900 sm:text-xl">
                     {isEdit ? "Edit Setting Ujian" : "Tambah Setting Ujian"}
                   </h2>
-                  <p className="mt-1 text-xs font-semibold leading-5 text-slate-500 md:text-sm">
-                    Kelola token, kelas, URL Google Form, durasi, jadwal, dan
-                    batas pelanggaran.
+                  <p className="mt-1 text-xs font-semibold text-slate-500 sm:text-sm">
+                    Isi data ujian dengan lengkap.
                   </p>
                 </div>
 
                 <button
                   type="button"
                   onClick={() => setOpenForm(false)}
-                  className="shrink-0 rounded-2xl bg-slate-100 p-2.5 text-slate-600 hover:bg-slate-200 md:p-3"
+                  className="rounded-2xl bg-slate-100 p-3 text-slate-600 hover:bg-slate-200"
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -476,10 +473,11 @@ export default function AdminExamSettings() {
 
               {/* BODY */}
               <form
+                id="exam-setting-form"
                 onSubmit={handleSave}
-                className="flex-1 overflow-y-auto px-5 py-5 md:px-6 md:py-6"
+                className="flex-1 overflow-y-auto p-5 sm:p-6"
               >
-                <div className="grid gap-4 md:grid-cols-2 md:gap-5">
+                <div className="grid gap-4 sm:gap-5 md:grid-cols-2">
                   <Input
                     label="Nama Ujian"
                     icon={<FileText className="h-5 w-5" />}
@@ -564,8 +562,8 @@ export default function AdminExamSettings() {
                 </div>
               </form>
 
-              {/* FOOTER */}
-              <div className="sticky bottom-0 z-10 border-t border-slate-100 bg-white/95 px-5 py-4 backdrop-blur md:px-6">
+              {/* FOOTER FIXED MOBILE */}
+              <div className="border-t border-slate-100 bg-white px-5 py-4 sm:px-6">
                 <div className="flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
                   <button
                     type="button"
@@ -576,8 +574,8 @@ export default function AdminExamSettings() {
                   </button>
 
                   <button
-                    type="button"
-                    onClick={handleSave}
+                    type="submit"
+                    form="exam-setting-form"
                     disabled={loadingSave}
                     className="flex items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-black text-white shadow-xl shadow-indigo-200 hover:bg-indigo-700 disabled:opacity-60"
                   >
@@ -600,15 +598,16 @@ export default function AdminExamSettings() {
         )}
 
         {qrOpen && selectedQr && (
-          <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-slate-950/60 p-2 backdrop-blur-sm sm:items-center sm:p-5">
-            <div className="max-h-[90vh] w-full max-w-md overflow-hidden rounded-[2rem] bg-white shadow-2xl">
-              <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5">
+          <div className="fixed inset-0 z-[9999] flex items-end justify-center bg-slate-950/60 p-0 backdrop-blur-sm sm:items-center sm:p-5">
+            <div className="flex max-h-[88vh] w-full max-w-md flex-col overflow-hidden rounded-t-[2rem] bg-white shadow-2xl sm:max-h-[92vh] sm:rounded-[2rem]">
+              {/* HEADER */}
+              <div className="flex items-center justify-between border-b border-slate-100 bg-white/95 px-5 py-4 backdrop-blur sm:px-6 sm:py-5">
                 <div>
-                  <h2 className="text-md font-black text-slate-900">
+                  <h2 className="text-lg font-black text-slate-900 sm:text-xl">
                     QR Ujian
                   </h2>
-                  <p className="mt-1 text-sm font-semibold text-slate-500">
-                    Scan untuk masuk otomatis ke halaman ujian.
+                  <p className="mt-1 text-xs font-semibold text-slate-500 sm:text-sm">
+                    Scan untuk mengisi kelas dan token otomatis.
                   </p>
                 </div>
 
@@ -620,27 +619,34 @@ export default function AdminExamSettings() {
                 </button>
               </div>
 
-              <div className="p-6 text-center">
-                <div className="mx-auto mb-5 inline-flex rounded-[2rem] border border-slate-100 bg-white p-4 shadow-xl shadow-slate-200/80">
+              {/* BODY */}
+              <div className="flex-1 overflow-y-auto p-5 text-center sm:p-6">
+                <div className="mx-auto mb-5 inline-flex rounded-[1.7rem] border border-slate-100 bg-white p-3 shadow-xl shadow-slate-200/80 sm:rounded-[2rem] sm:p-4">
                   <QRCodeCanvas
                     id="exam-qr-canvas"
                     value={selectedQr.qrUrl}
-                    size={240}
+                    size={220}
                     level="H"
                     includeMargin
                   />
                 </div>
 
-                <h3 className="text-lg font-black text-slate-900">
+                <h3 className="line-clamp-2 text-lg font-black text-slate-900">
                   {selectedQr.namaUjian}
                 </h3>
 
-                <p className="mt-1 text-sm font-bold text-slate-500">
-                  {selectedQr.kelas} • Token: {selectedQr.token}
-                </p>
+                <div className="mt-3 flex flex-wrap justify-center gap-2">
+                  <span className="rounded-full bg-indigo-50 px-3 py-1 text-xs font-black text-indigo-700">
+                    {selectedQr.kelas}
+                  </span>
 
-                <div className="mt-4 rounded-3xl bg-slate-50 p-4 text-left">
-                  <p className="text-xs font-black uppercase text-slate-400">
+                  <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-black text-emerald-700">
+                    Token: {selectedQr.token}
+                  </span>
+                </div>
+
+                <div className="mt-5 rounded-3xl bg-slate-50 p-4 text-left">
+                  <p className="text-[10px] font-black uppercase tracking-wide text-slate-400">
                     Link QR
                   </p>
                   <p className="mt-1 break-all text-xs font-semibold leading-5 text-slate-600">
@@ -648,9 +654,20 @@ export default function AdminExamSettings() {
                   </p>
                 </div>
 
+                <div className="mt-5 rounded-3xl border border-amber-100 bg-amber-50 p-4 text-left">
+                  <p className="text-sm font-black text-amber-700">Catatan</p>
+                  <p className="mt-1 text-xs font-semibold leading-5 text-amber-700/90">
+                    QR ini hanya mengisi otomatis kelas dan token. Siswa tetap
+                    wajib mengisi nama lengkap sebelum mulai ujian.
+                  </p>
+                </div>
+              </div>
+
+              {/* FOOTER */}
+              <div className="border-t border-slate-100 bg-white px-5 py-4 sm:px-6">
                 <button
                   onClick={downloadQr}
-                  className="mt-6 flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-black text-white shadow-xl shadow-indigo-200 transition hover:bg-indigo-700"
+                  className="flex w-full items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-5 py-3 text-sm font-black text-white shadow-xl shadow-indigo-200 transition hover:bg-indigo-700"
                 >
                   <Download className="h-5 w-5" />
                   Download QR
