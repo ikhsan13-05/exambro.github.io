@@ -29,6 +29,7 @@ import { QRCodeCanvas } from "qrcode.react";
 const defaultForm = {
   id: "",
   namaUjian: "",
+  mataPelajaran: "",
   token: "",
   kelas: "",
   formUrl: "",
@@ -113,6 +114,7 @@ export default function AdminExamSettings() {
     setForm({
       id: item.id || "",
       namaUjian: item.namaUjian || "",
+      mataPelajaran: item.mataPelajaran || "",
       token: item.token || "",
       kelas: item.kelas || "",
       formUrl: item.formUrl || "",
@@ -484,6 +486,15 @@ export default function AdminExamSettings() {
                     value={form.namaUjian}
                     onChange={(value) => setForm({ ...form, namaUjian: value })}
                     placeholder="Contoh: Ujian Matematika"
+                  />
+
+                  <Input
+                    label="Mata Pelajaran"
+                    value={form.mataPelajaran}
+                    onChange={(value) =>
+                      setForm({ ...form, mataPelajaran: value })
+                    }
+                    placeholder="Contoh: Matematika"
                   />
 
                   <Input

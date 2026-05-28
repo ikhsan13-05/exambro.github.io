@@ -526,9 +526,15 @@ export default function ExamRoom() {
 
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
-                <h1 className="truncate text-base font-black text-slate-950 md:text-lg">
-                  {session.namaUjian}
-                </h1>
+                <div>
+                  <h1 className="truncate text-base font-black text-slate-950 md:text-lg">
+                    {session.namaUjian}
+                  </h1>
+
+                  <p className="text-sm font-black text-indigo-600">
+                    Mata Pelajaran: {session.mataPelajaran || "-"}
+                  </p>
+                </div>
 
                 <span className="rounded-full bg-emerald-50 px-3 py-1 text-[10px] font-black uppercase tracking-wide text-emerald-700">
                   Secure Mode
@@ -630,9 +636,6 @@ export default function ExamRoom() {
                 <CheckCircle2 className="h-5 w-5 text-emerald-600" />
               </div>
               <div>
-                <p className="text-xs font-black text-slate-900">
-                  Google Form Ujian
-                </p>
                 <p className="text-[11px] font-semibold text-slate-400">
                   Jawaban tetap dikirim melalui Google Form
                 </p>
